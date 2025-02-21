@@ -1,0 +1,119 @@
+<style>
+        /* Global Background */
+        body {
+            background-color: #141414;
+            color: #ffffff;
+        }
+
+        /* Sidebar Styling */
+        [data-testid="stSidebar"] {
+            background-color: #181818;
+        }
+
+        [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+            color: #ffffff;
+        }
+
+        /* Chat Bubble Styling */
+        div[data-testid="stVerticalBlock"] div.stChatMessageUser {
+            background-color: #e50914 !important;
+            color: white;
+            border-radius: 15px;
+            padding: 10px 15px;
+        }
+
+        div[data-testid="stVerticalBlock"] div.stChatMessageAssistant {
+            background-color: #212121 !important;
+            color: white;
+            border-radius: 15px;
+            padding: 10px 15px;
+        }
+
+        /* Base button style */
+        div.stButton > button {
+            background-color: #e50914 !important;
+            color: white !important;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5em 1em;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Hover effect for button */
+        div.stButton > button:hover {
+            background-color: #C11119 !important;
+            color: white !important;
+        }
+
+        /* File Uploader and Widgets */
+        .stFileUploader label {
+            color: #ffffff !important;
+        }
+
+        .stDownloadButton button {
+            background-color: #e50914 !important;
+        }
+
+        /* Input Styling */
+        div[data-baseweb="input"] input {
+            color: #ffffff !important;
+            background-color: #212121 !important;
+        }
+
+        div.stMultiSelect {
+                background-color: #141414; /* Netflix dark background */
+                border: 1px solid #ffffff; 
+                border-radius: 4px;
+                padding: 5px;
+                color: white;
+            }
+
+            /* Style text within the widget */
+            div.stMultiSelect div[data-baseweb="select"] * {
+                color: #ffffff;
+                font-family: Arial, sans-serif;
+            }
+
+            /* Add hover state for dropdown options */
+            div.stMultiSelect div[data-baseweb="select"]:hover {
+                border: 1px solid #141414;
+            }
+
+            /* Style individual selected options */
+            div.stMultiSelect span span {
+                background-color: #C11119; /* Netflix hover red for selected options */
+
+            }
+
+        span[data-baseweb="tag"] {
+        background-color: #C11119 !important;
+    }
+
+            span[data-baseweb="icon"] {
+        background-color: green !important;
+    }
+
+    /* Add hover state for dropdown options */
+    div.stMultiSelect div[data-baseweb="select"] {
+        border: 1px solid black;
+    }
+
+    /* Add hover state for dropdown options */
+    div.stMultiSelect div[data-baseweb="select"]:hover {
+        border: 1px solid #E50914;
+    }
+
+        /* Title Styling */
+        h1, h2, h3 {
+            text-align: center;
+            color: #ffffff !important;
+        }
+
+        /* Spinner Styling */
+        .stSpinner > div[role="progressbar"] {
+            border-top-color: #e50914;
+        }
+        </style>

@@ -1,0 +1,329 @@
+from typing import List, Any
+from langchain_core.prompts import PromptTemplate
+from langchain.tools import Tool
+from langchain_neo4j import Neo4jChatMessageHistory
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.output_parsers import StrOutputParser
+from langchain.prompts.chat import MessagesPlaceholder
+from langchain.prompts.chat import ChatPromptTemplate
+
+from chat.llm import llm
+import streamlit as st
+from database.graph import graph
+from utils import get_session_id
+
+from tools.vector_recommender import recommend_similar_movies
+from tools.cypher import recommend_movies_relationships
+from tools.user_preferences import recommend_movies_user_preferences
+from prompts.llm_prompts import AGENT_PROMPT
+
+
+class MovieRecommenderTools:
+    """Class to manage and create movie recommendation tools."""
+
+    @staticmethod
+    def create_general_chat_tool() -> Tool:
+        """Create the general chat tool."""
+
+        chat_prompt = ChatPromptTemplate.from_messages(
+            [
+                (
+                    "system",
+                    "You are a movie expert providing information about movies.",
+                ),
+                MessagesPlaceholder(
+                    "user_watched_movies"
+                ),  # This placeholder will hold extra information about watched movies
+                ("human", "{input}"),
+            ]
+        )
+
+        chat_chain = chat_prompt | llm | StrOutputParser()
+
+        return Tool.from_function(
+            name="General Chat",
+            description="For general movie chat not covered by other tools",
+            func=chat_chain.invoke,
+        )
+
+    @staticmethod
+    def create_description_based_tool() -> Tool:
+        """Create the movie recommendation based on description tool."""
+        return Tool.from_function(
+            name="Movie recommendation based on description",
+            description="For when you need to find similar movies based on their description",
+            func=recommend_similar_movies,
+        )
+
+    @staticmethod
+    def create_relationship_based_tool() -> Tool:
+        """Create the movie recommendation based on relationships tool."""
+        return Tool.from_function(
+            name="Movie recommendation based on relationships",
+            description="For when you need to find similar movies based on their relationships",
+            func=recommend_movies_relationships,
+        )
+
+    @staticmethod
+    def create_preference_based_tool() -> Tool:
+        """Create the movie recommendation based on user preferences tool."""
+        return Tool.from_function(
+            name="Movie recommendation based on user preferences",
+            description="For when you need to find similar movies based on user preferences",
+            func=recommend_movies_user_preferences,
+        )
+
+    @classmethod
+    def create_tools(cls) -> List[Tool]:
+        """Create and return all available tools."""
+        return [
+            cls.create_general_chat_tool(),
+            cls.create_description_based_tool(),
+            cls.create_relationship_based_tool(),
+            cls.create_preference_based_tool(),
+        ]
+
+
+class MovieRecommenderAgent:
+    """Class to manage the movie recommendation agent."""
+
+    def __init__(self, available_tools: List[Tool]):
+        """Initialize the movie recommendation agent with tools."""
+        self.tools = available_tools
+        self.agent_prompt = self._create_agent_prompt()
+        self.agent = self._create_agent()
+        self.executor = AgentExecutor(
+            agent=self.agent,
+            tools=self.tools,
+            verbose=True,
+            return_intermediate_steps=True
+        )
+        self.chat_agent = self._create_chat_agent()
+
+    def _create_agent_prompt(self) -> PromptTemplate:
+        """Create the agent prompt template."""
+        return PromptTemplate.from_template(AGENT_PROMPT)
+
+    def _create_agent(self) -> Any:
+        """Create the LangChain agent."""
+        return create_react_agent(llm, self.tools, self.agent_prompt)
+
+    def _create_chat_agent(self) -> RunnableWithMessageHistory:
+        """Create the chat agent with message history."""
+        return RunnableWithMessageHistory(
+            self.executor,
+            lambda: self._get_chat_history(),
+            input_messages_key="input",
+            history_messages_key="chat_history",
+        )
+
+    def _get_chat_history(self) -> Neo4jChatMessageHistory:
+        """Get the chat message history from Neo4j."""
+        return Neo4jChatMessageHistory(session_id=get_session_id(), graph=graph)
+
+    def response(self, user_input: str, user_watched_movies: List[str]) -> str:
+        """Generate a response based on user input and watched movies."""
+        payload = {"input": user_input, "user_watched_movies": user_watched_movies}
+        response = self.chat_agent.invoke(
+            payload, {"configurable": {"session_id": get_session_id()}}
+        )
+        return response["output"]
+
+
+class MovieRecommenderApp:
+    """Class to manage the movie recommendation application."""
+
+    tools = MovieRecommenderTools.create_tools()
+    agent = MovieRecommenderAgent(available_tools=tools)
+
+    @staticmethod
+    def generate_response(
+        user_input: str,
+        user_watched_movies: List[str],
+        agent: MovieRecommenderAgent = agent,
+    ) -> str:
+        """
+        Generate a response based on user input and the list of movies the user has watched.
+
+        Args:
+            user_input (str): The input provided by the user for which a response is to be generated.
+            user_watched_movies (List[str]): A list of movie titles that the user has already watched.
+
+        Returns:
+            str: The generated response as a string.
+
+        Raises:
+            ValueError: If the input arguments are of incorrect type.
+        """
+        try:
+            # Input validation
+            if not isinstance(user_input, str):
+                raise ValueError("user_input must be a string")
+            if not isinstance(user_watched_movies, list) or not all(
+                isinstance(movie, str) for movie in user_watched_movies
+            ):
+                raise ValueError("user_watched_movies must be a list of strings")
+
+            return agent.response(user_input, user_watched_movies)
+
+        except Exception as e:
+            # Log the error
+            print(f"An error occurred: {str(e)}")
+            # You can also log this to a file or another logging mechanism
+            raise
+
+
+# from llm import llm
+# import streamlit as st
+# from database.graph import graph
+# from utils import initialize_session_state
+# from utils import get_session_id, check_if_session_state_empty
+# from tools.vector_recommender import recommend_similar_movies
+# from tools.cypher import recommend_movies_relationships
+# from tools.user_preferences import recommend_movies_user_preferences
+
+# from langchain_core.prompts import (
+#     ChatPromptTemplate,
+#     PromptTemplate,
+#     MessagesPlaceholder,
+# )
+# from langchain.schema import StrOutputParser
+# from langchain.tools import Tool
+# from langchain_neo4j import Neo4jChatMessageHistory
+# from langchain.agents import AgentExecutor, create_react_agent
+# from langchain_core.runnables.history import RunnableWithMessageHistory
+# from langchain import hub
+
+# # Session State
+# initialize_session_state()
+
+# # Create a movie chat chain
+# chat_prompt = ChatPromptTemplate.from_messages(
+#     [
+#         ("system", "You are a movie expert providing information about movies."),
+#         MessagesPlaceholder(
+#             "user_watched_movies"
+#         ),  # This placeholder will hold extra information about watched movies
+#         ("human", "{input}"),
+#     ]
+# )
+
+# chat_chain = chat_prompt | llm | StrOutputParser()
+
+# # Create a set of tools
+# tools = [
+#     Tool.from_function(
+#         name="General Chat",
+#         description="For general movie chat not covered by other tools",
+#         func=chat_chain.invoke,
+#     ),
+#     Tool.from_function(
+#         name="Movie recommendation based on description",
+#         description="For when you need to find similar movies based on their description",
+#         func=recommend_similar_movies,
+#     ),
+#     Tool.from_function(
+#         name="Movie recommendation based on relationships",
+#         description="For when you need to find similar movies based on their relationships",
+#         func=recommend_movies_relationships,
+#     ),
+#     Tool.from_function(
+#         name="Movie recommendation based on user preferences",
+#         description="For when you need to find similar movies based on user preferences.",
+#         func=recommend_movies_user_preferences,
+#     ),
+# ]
+
+
+# # Create chat history callback
+# def chat_history(session_id):
+#     return Neo4jChatMessageHistory(
+#         session_id=session_id,
+#         graph=graph,
+#     )
+
+
+# # Create the agent
+# # agent_prompt = hub.pull("hwchase17/react-chat")
+
+# agent_prompt = PromptTemplate.from_template(
+#     """
+# Take on the role of a movie expert tasked with providing personalized movie recommendations.
+# Your goal is to give detailed and insightful suggestions while adhering strictly to the user's viewing history,
+# ensuring not to recommend any movies they have already watched. If movie is a part of a francise you can recomend those movies.
+# Example: "The Matrix" is not the same as "The Matrix 2". You can recomend Matrix 2 when user likes Matrix.
+# Example 2: "Jaws" is not the same as "Jaws: Sharks". You can recomend Jaws: Sharks when user likes Jaws.
+
+# Engage with users kindly and constructively, making movie suggestions based on their preferences when available.
+# Use the provided tools strategically,ensuring that each tool is utilized only once, to enhance your responses.
+# Keep your answers focused solely on movies, actors, or directors, sidestepping any unrelated inquiries.
+# Your responses should be informative and engaging to enhance the user's experience.
+
+# If you are not sure, you can question the user about his preferences, what he likes to watch etc.
+
+# TOOLS:
+
+# You have access to the following tools:
+
+
+# {tools}
+
+
+# To use a tool, please use the following format:
+
+# ```
+# Thought: Do I need to use a tool? Yes/No
+# Thought_2: Do I need to other tool? Yes/No
+# Action: the action to take, should be one of [{tool_names}]
+# Action Input: the input to the action
+# Observation: the result of the action
+
+# ```
+# You can use "Movie recommendation based on user preferences" only when:
+
+
+# User preferences are provided, including favorite movies, actors, or genres.
+# You have already used one of the tools, preferably based on movie description.
+# If this tool is used first, and the user has not explicitly requested preference-based recommendations, select another tool for the initial suggestion.
+# ---
+
+# When you have a response to say to the Human, or if you do not need to use a tool, you MUST use the format:
+
+# ```
+# Thought: Do I need to use a tool? No
+# Final Answer: [your response here]
+# ```
+
+# Begin!
+
+# Previous conversation history:
+# {chat_history}
+
+# New input: {input}
+
+# Movies, which user already watched: {user_watched_movies}
+
+# {agent_scratchpad}
+# """
+# )
+
+# agent = create_react_agent(llm, tools, agent_prompt)
+# agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+# chat_agent = RunnableWithMessageHistory(
+#     agent_executor,
+#     chat_history,
+#     input_messages_key="input",
+#     history_messages_key="chat_history",
+# )
+
+
+# # Create a handler to call the agent
+# def generate_response(user_input, user_movies):
+#     # Combine all necessary inputs into a single dictionary
+#     payload = {"input": user_input, "user_watched_movies": user_movies}
+#     response = chat_agent.invoke(
+#         payload, {"configurable": {"session_id": get_session_id()}}
+#     )
+#     return response["output"]
