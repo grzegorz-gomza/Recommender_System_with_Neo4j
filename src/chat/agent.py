@@ -19,70 +19,45 @@ from tools.user_preferences import recommend_movies_user_preferences
 from prompts.llm_prompts import AGENT_PROMPT
 
 
-class MovieRecommenderTools:
-    """Class to manage and create movie recommendation tools."""
-
-    @staticmethod
-    def create_general_chat_tool() -> Tool:
-        """Create the general chat tool."""
-
-        chat_prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    "You are a movie expert providing information about movies.",
-                ),
-                MessagesPlaceholder(
-                    "user_watched_movies"
-                ),  # This placeholder will hold extra information about watched movies
-                ("human", "{input}"),
-            ]
-        )
-
-        chat_chain = chat_prompt | llm | StrOutputParser()
-
-        return Tool.from_function(
-            name="General Chat",
-            description="For general movie chat not covered by other tools",
-            func=chat_chain.invoke,
-        )
-
-    @staticmethod
-    def create_description_based_tool() -> Tool:
-        """Create the movie recommendation based on description tool."""
-        return Tool.from_function(
-            name="Movie recommendation based on description",
-            description="For when you need to find similar movies based on their description",
-            func=recommend_similar_movies,
-        )
-
-    @staticmethod
-    def create_relationship_based_tool() -> Tool:
-        """Create the movie recommendation based on relationships tool."""
-        return Tool.from_function(
-            name="Movie recommendation based on relationships",
-            description="For when you need to find similar movies based on their relationships",
-            func=recommend_movies_relationships,
-        )
-
-    @staticmethod
-    def create_preference_based_tool() -> Tool:
-        """Create the movie recommendation based on user preferences tool."""
-        return Tool.from_function(
-            name="Movie recommendation based on user preferences",
-            description="For when you need to find similar movies based on user preferences",
-            func=recommend_movies_user_preferences,
-        )
-
-    @classmethod
-    def create_tools(cls) -> List[Tool]:
-        """Create and return all available tools."""
-        return [
-            cls.create_general_chat_tool(),
-            cls.create_description_based_tool(),
-            cls.create_relationship_based_tool(),
-            cls.create_preference_based_tool(),
+def create_chat_chain():
+    # Create a movie chat chain
+    chat_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", "You are a movie expert providing information about movies."),
+            MessagesPlaceholder(
+                "user_watched_movies"
+            ),  # This placeholder will hold extra information about watched movies
+            ("human", "{input}"),
         ]
+    )
+    chat_chain = chat_prompt | llm | StrOutputParser()
+
+    return chat_chain
+
+
+# Create a set of tools
+tools = [
+    Tool.from_function(
+        name="General Chat",
+        description="For general movie chat not covered by other tools",
+        func=create_chat_chain().invoke,
+    ),
+    Tool.from_function(
+        name="Movie recommendation based on description",
+        description="For when you need to find similar movies based on their description",
+        func=recommend_similar_movies,
+    ),
+    Tool.from_function(
+        name="Movie recommendation based on relationships",
+        description="For when you need to find similar movies based on their relationships",
+        func=recommend_movies_relationships,
+    ),
+    Tool.from_function(
+        name="Movie recommendation based on user preferences",
+        description="For when you need to find similar movies based on user preferences.",
+        func=recommend_movies_user_preferences,
+    ),
+]
 
 
 class MovieRecommenderAgent:
@@ -97,7 +72,7 @@ class MovieRecommenderAgent:
             agent=self.agent,
             tools=self.tools,
             verbose=True,
-            return_intermediate_steps=True
+            return_intermediate_steps=True,
         )
         self.chat_agent = self._create_chat_agent()
 
@@ -134,7 +109,6 @@ class MovieRecommenderAgent:
 class MovieRecommenderApp:
     """Class to manage the movie recommendation application."""
 
-    tools = MovieRecommenderTools.create_tools()
     agent = MovieRecommenderAgent(available_tools=tools)
 
     @staticmethod
@@ -172,3 +146,4 @@ class MovieRecommenderApp:
             print(f"An error occurred: {str(e)}")
             # You can also log this to a file or another logging mechanism
             raise
+

@@ -113,7 +113,6 @@ def handle_manual_preferences(
         st.session_state.get("user_movies", []),
         max_selections=10,
     )
-    st.write("You selected:", st.session_state.user_movies)
 
     st.session_state.user_actors = st.multiselect(
         "⭐ Choose Favorite Actors",
@@ -121,7 +120,6 @@ def handle_manual_preferences(
         st.session_state.get("user_actors", []),
         max_selections=10,
     )
-    st.write("You selected:", st.session_state.user_actors)
 
     st.session_state.user_genres = st.multiselect(
         "🎭 Pick Favorite Genres",
