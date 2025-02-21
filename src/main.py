@@ -1,6 +1,4 @@
-import os
 import io
-import sys
 import streamlit as st
 from utils import clean_uploaded_data, initialize_session_state
 from database.graph import graph
@@ -9,12 +7,6 @@ import prompts.cypher_queries as cypher_queries
 
 # Type hinting imports
 from typing import List, Optional
-
-# Adding the parent directory to the Python path for imports
-# current_dir = os.path.dirname(os.path.abspath(__file__))
-# parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
-# if parent_dir not in sys.path:
-#     sys.path.append(parent_dir)
 
 # Get sensitive information
 openai_api_key = st.secrets["OPENAI_API_KEY"]
@@ -121,6 +113,7 @@ def handle_manual_preferences(
         st.session_state.get("user_movies", []),
         max_selections=10,
     )
+    st.write("You selected:", st.session_state.user_movies)
 
     st.session_state.user_actors = st.multiselect(
         "⭐ Choose Favorite Actors",
@@ -128,6 +121,7 @@ def handle_manual_preferences(
         st.session_state.get("user_actors", []),
         max_selections=10,
     )
+    st.write("You selected:", st.session_state.user_actors)
 
     st.session_state.user_genres = st.multiselect(
         "🎭 Pick Favorite Genres",
