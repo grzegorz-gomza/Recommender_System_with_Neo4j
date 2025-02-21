@@ -10,7 +10,7 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 
 __version__ = "1.0"
 
-REPO_NAME = "Recommender-System-for-Netflix"
+REPO_NAME = "Recommender_System_with_Neo4j"
 AUTHOR_USER_NAME = "Grzegorz Gomza"
 SRC_REPO = ""
 AUTHOR_EMAIL = "gomza.datascience@gmail.com"

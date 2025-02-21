@@ -34,8 +34,8 @@ The application is deployed on the Streamlit platform.
 
 Since this is a training project and not a production-ready product, it is possible that:
 
-    *  The provided API key may be deactivated, as the costs are higher than the author can accept.
-    *  The Neo4j Aura instance may be paused, as it is a free-tier database.
+*  The provided API key may be deactivated, as the costs are higher than the author can accept.
+*  The Neo4j Aura instance may be paused, as it is a free-tier database.
 
 If either of these issues occurs, please contact the author to resolve them.
 
