@@ -73,6 +73,12 @@ Previous conversation history:
 
 New input: {input}
 
+Movies, which user likes: {user_favorite_movies}
+
+Actors, which user likes: {user_favorite_actors}
+
+Genres, which user likes: {user_favorite_genres}
+
 Movies, which user already watched: {user_watched_movies}
 
 {agent_scratchpad}

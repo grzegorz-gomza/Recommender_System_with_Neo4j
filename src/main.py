@@ -197,6 +197,9 @@ def handle_user_query(user_message: str) -> None:
         try:
             response = MovieRecommenderApp.generate_response(
                 user_input=user_message,
+                user_favorite_movies=st.session_state.get("user_movies", []),
+                user_favorite_actors=st.session_state.get("user_actors", []),
+                user_favorite_genres=st.session_state.get("user_genres", []),
                 user_watched_movies=st.session_state.get("user_watched", []),
             )
             st.session_state.chat_history.append(("Assistant", response))

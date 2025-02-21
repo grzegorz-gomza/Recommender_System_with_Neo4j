@@ -97,9 +97,22 @@ class MovieRecommenderAgent:
         """Get the chat message history from Neo4j."""
         return Neo4jChatMessageHistory(session_id=get_session_id(), graph=graph)
 
-    def response(self, user_input: str, user_watched_movies: List[str]) -> str:
+    def response(
+        self,
+        user_input: str,
+        user_favorite_movies: List[str],
+        user_favorite_actors: List[str],
+        user_favorite_genres: List[str],
+        user_watched_movies: List[str],
+    ) -> str:
         """Generate a response based on user input and watched movies."""
-        payload = {"input": user_input, "user_watched_movies": user_watched_movies}
+        payload = {
+            "input": user_input,
+            "user_favorite_movies": user_favorite_movies,
+            "user_favorite_actors": user_favorite_actors,
+            "user_favorite_genres": user_favorite_genres,
+            "user_watched_movies": user_watched_movies,
+        }
         response = self.chat_agent.invoke(
             payload, {"configurable": {"session_id": get_session_id()}}
         )
@@ -114,6 +127,9 @@ class MovieRecommenderApp:
     @staticmethod
     def generate_response(
         user_input: str,
+        user_favorite_movies: List[str],
+        user_favorite_actors: List[str],
+        user_favorite_genres: List[str],
         user_watched_movies: List[str],
         agent: MovieRecommenderAgent = agent,
     ) -> str:
@@ -134,16 +150,37 @@ class MovieRecommenderApp:
             # Input validation
             if not isinstance(user_input, str):
                 raise ValueError("user_input must be a string")
+
+            if not isinstance(user_favorite_movies, list) or not all(
+                isinstance(movie, str) for movie in user_favorite_movies
+            ):
+                raise ValueError("user_favorite_movies must be a list of strings")
+
+            if not isinstance(user_favorite_actors, list) or not all(
+                isinstance(actor, str) for actor in user_favorite_actors
+            ):
+                raise ValueError("user_favorite_actors must be a list of strings")
+
+            if not isinstance(user_favorite_genres, list) or not all(
+                isinstance(genre, str) for genre in user_favorite_genres
+            ):
+                raise ValueError("user_favorite_genres must be a list of strings")
+
             if not isinstance(user_watched_movies, list) or not all(
                 isinstance(movie, str) for movie in user_watched_movies
             ):
                 raise ValueError("user_watched_movies must be a list of strings")
 
-            return agent.response(user_input, user_watched_movies)
+            return agent.response(
+                user_input,
+                user_favorite_movies,
+                user_favorite_actors,
+                user_favorite_genres,
+                user_watched_movies,
+            )
 
         except Exception as e:
             # Log the error
             print(f"An error occurred: {str(e)}")
             # You can also log this to a file or another logging mechanism
             raise
-

@@ -14,10 +14,10 @@ Fine Tuning:
 Instead of that take one node/parameter as the start point and yield the the other node parameteres, to avoid returning no results.
 Example:
 Instead of:
-MATCH (a:Actor {actorName: "actor_name"})-[:ACTED_IN]->(m:Movie)-[:IN_GENRE]->(g:Genre {genre: "genre_name"})
+MATCH (a:Actor {{actorName: "actor_name"}})-[:ACTED_IN]->(m:Movie)-[:IN_GENRE]->(g:Genre {{genre: "genre_name"}})
 RETURN m.title
 Do:
-MATCH (a:Actor {actorName: "actor_name"})-[:ACTED_IN]->(m:Movie)-[:IN_GENRE]->(g:Genre)
+MATCH (a:Actor {{actorName: "actor_name"}})-[:ACTED_IN]->(m:Movie)-[:IN_GENRE]->(g:Genre)
 RETURN m.title, g.genre
 
 
