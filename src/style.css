@@ -57,6 +57,15 @@
     background-color: #0e1117 !important;
 }
 
+[data-testid="stBottomBlockContainer"] {
+  background-color: #0e1117 !important;
+}
+
+[data-testid="stHeader"] {
+  background-color: #0e1117 !important;
+}
+
+
 :root {
     --netflix-red: #e50914;
     --netflix-red-hover: #c11119;
@@ -99,6 +108,11 @@
   .stChatMessageAssistant {
     background-color: var(--netflix-gray) !important;
     color: var(--netflix-white);
+  }
+
+  .stkey_StChatInput {
+    background-color: "green" !important;
+    color: var(--netflix-white) !important;
   }
   
   /* Button Styling */
