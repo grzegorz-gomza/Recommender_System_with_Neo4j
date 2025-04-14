@@ -174,6 +174,7 @@ cython_debug/
 # Additionaly to ignore
 .streamlit/secrets.toml
 *.txt
+.devcontainer
 
 # Don't ignore requrements.txt
 !requirements.txt
