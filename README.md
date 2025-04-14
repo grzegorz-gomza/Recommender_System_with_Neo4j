@@ -80,7 +80,7 @@ Provide some brief and clear instructions how to run the project on your own. Fo
 6.  **Run the Streamlit app:**
 
     ```bash
-    streamlit run src/main.py
+    streamlit run streamlit_app.py
     ```
 
 
