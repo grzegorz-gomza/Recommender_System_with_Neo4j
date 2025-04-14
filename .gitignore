@@ -172,7 +172,7 @@ cython_debug/
 
 
 # Additionaly to ignore
-.streamlit
+.streamlit/secrets.toml
 *.txt
 
 # Don't ignore requrements.txt

@@ -1,9 +1,10 @@
 import io
 import streamlit as st
-from utils import clean_uploaded_data, initialize_session_state
-from database.graph import graph
-from chat.agent import MovieRecommenderApp
-import prompts.cypher_queries as cypher_queries
+import streamlit.config
+from src.utils import clean_uploaded_data, initialize_session_state
+from src.database.graph import graph
+from src.chat.agent import MovieRecommenderApp
+import src.prompts.cypher_queries as cypher_queries
 
 # Type hinting imports
 from typing import List, Optional
@@ -30,7 +31,7 @@ def main() -> None:
     # Apply custom styling
     with open("src/style.css", "r") as style_file:
         css = style_file.read()
-    st.markdown(css, unsafe_allow_html=True)
+    st.markdown("".join(["<style>", css, "</style>"]), unsafe_allow_html=True)
 
     st.title("🎥 Netflix Movie Recommender")
 

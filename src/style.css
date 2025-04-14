@@ -1,119 +1,160 @@
-<style>
-        /* Global Background */
-        body {
-            background-color: #141414;
-            color: #ffffff;
-        }
+/* Reset and Global Styles */
+/* Force dark theme */
+.stApp {
+    background-color: #0e1117;
+}
+.stBottomBlockContainer {
+    background-color: #0e1117 !important;
+}
 
-        /* Sidebar Styling */
-        [data-testid="stSidebar"] {
-            background-color: #181818;
-        }
+/* Override light theme elements */
+.css-1avcm0n {
+    background-color: #0e1117 !important;
+}
 
-        [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
-            color: #ffffff;
-        }
+/* Dark mode for containers */
+.css-1r6slb0, .css-12oz5g7 {
+    background-color: #262730 !important;
+    border: 1px solid #21222c !important;
+}
 
-        /* Chat Bubble Styling */
-        div[data-testid="stVerticalBlock"] div.stChatMessageUser {
-            background-color: #e50914 !important;
-            color: white;
-            border-radius: 15px;
-            padding: 10px 15px;
-        }
+/* Dark mode for inputs */
+.stTextInput > div > div > input {
+    background-color: #262730 !important;
+    color: #ffffff !important;
+}
 
-        div[data-testid="stVerticalBlock"] div.stChatMessageAssistant {
-            background-color: #212121 !important;
-            color: white;
-            border-radius: 15px;
-            padding: 10px 15px;
-        }
+/* Dark mode for selectbox */
+.stSelectbox > div > div > div {
+    background-color: #262730 !important;
+    color: #ffffff !important;
+}
 
-        /* Base button style */
-        div.stButton > button {
-            background-color: #e50914 !important;
-            color: white !important;
-            border: none;
-            border-radius: 5px;
-            padding: 0.5em 1em;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+/* Dark mode for number input */
+.stNumberInput > div > div > input {
+    background-color: #262730 !important;
+    color: #ffffff !important;
+}
 
-        /* Hover effect for button */
-        div.stButton > button:hover {
-            background-color: #C11119 !important;
-            color: white !important;
-        }
+/* Dark text color for all elements */
+.stMarkdown, .stText {
+    color: #ffffff !important;
+}
 
-        /* File Uploader and Widgets */
-        .stFileUploader label {
-            color: #ffffff !important;
-        }
+/* Dark mode for dataframes */
+.dataframe {
+    background-color: #262730 !important;
+    color: #ffffff !important;
+}
 
-        .stDownloadButton button {
-            background-color: #e50914 !important;
-        }
+/* Dark mode for plots */
+.js-plotly-plot {
+    background-color: #262730 !important;
+}
 
-        /* Input Styling */
-        div[data-baseweb="input"] input {
-            color: #ffffff !important;
-            background-color: #212121 !important;
-        }
+/* Sidebar dark mode */
+[data-testid="stSidebar"] {
+    background-color: #0e1117 !important;
+}
 
-        div.stMultiSelect {
-                background-color: #141414; /* Netflix dark background */
-                border: 1px solid #ffffff; 
-                border-radius: 4px;
-                padding: 5px;
-                color: white;
-            }
-
-            /* Style text within the widget */
-            div.stMultiSelect div[data-baseweb="select"] * {
-                color: #ffffff;
-                font-family: Arial, sans-serif;
-            }
-
-            /* Add hover state for dropdown options */
-            div.stMultiSelect div[data-baseweb="select"]:hover {
-                border: 1px solid #141414;
-            }
-
-            /* Style individual selected options */
-            div.stMultiSelect span span {
-                background-color: #C11119; /* Netflix hover red for selected options */
-
-            }
-
-        span[data-baseweb="tag"] {
-        background-color: #C11119 !important;
-    }
-
-            span[data-baseweb="icon"] {
-        background-color: green !important;
-    }
-
-    /* Add hover state for dropdown options */
-    div.stMultiSelect div[data-baseweb="select"] {
-        border: 1px solid black;
-    }
-
-    /* Add hover state for dropdown options */
-    div.stMultiSelect div[data-baseweb="select"]:hover {
-        border: 1px solid #E50914;
-    }
-
-        /* Title Styling */
-        h1, h2, h3 {
-            text-align: center;
-            color: #ffffff !important;
-        }
-
-        /* Spinner Styling */
-        .stSpinner > div[role="progressbar"] {
-            border-top-color: #e50914;
-        }
-        </style>
+:root {
+    --netflix-red: #e50914;
+    --netflix-red-hover: #c11119;
+    --netflix-dark: #141414;
+    --netflix-darker: #181818;
+    --netflix-gray: #212121;
+    --netflix-white: #ffffff;
+  }
+  
+  body {
+    background-color: var(--netflix-dark);
+    color: var(--netflix-white);
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Sidebar Styling */
+  [data-testid="stSidebar"] {
+    background-color: var(--netflix-darker);
+  }
+  
+  [data-testid="stSidebar"] h1,
+  [data-testid="stSidebar"] h2,
+  [data-testid="stSidebar"] h3 {
+    color: var(--netflix-white);
+  }
+  
+  /* Chat Message Styling */
+  .stChatMessageUser,
+  .stChatMessageAssistant {
+    border-radius: 15px;
+    padding: 10px 15px;
+    margin: 5px 0;
+  }
+  
+  .stChatMessageUser {
+    background-color: var(--netflix-red) !important;
+    color: var(--netflix-white);
+  }
+  
+  .stChatMessageAssistant {
+    background-color: var(--netflix-gray) !important;
+    color: var(--netflix-white);
+  }
+  
+  /* Button Styling */
+  div.stButton > button {
+    background-color: var(--netflix-red) !important;
+    color: var(--netflix-white) !important;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  div.stButton > button:hover {
+    background-color: var(--netflix-red-hover) !important;
+  }
+  
+  /* Input and Widget Styling */
+  .stFileUploader label,
+  div[data-baseweb="input"] input {
+    color: var(--netflix-white) !important;
+  }
+  
+  div[data-baseweb="input"] input {
+    background-color: var(--netflix-gray) !important;
+  }
+  
+  /* MultiSelect Styling */
+  div.stMultiSelect {
+    background-color: var(--netflix-dark);
+    border: 1px solid var(--netflix-white);
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  div.stMultiSelect div[data-baseweb="select"] {
+    border: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+  
+  div.stMultiSelect div[data-baseweb="select"]:hover {
+    border-color: var(--netflix-red);
+  }
+  
+  span[data-baseweb="tag"] {
+    background-color: var(--netflix-red-hover) !important;
+  }
+  
+  /* Typography */
+  h1, h2, h3 {
+    text-align: center;
+    color: var(--netflix-white) !important;
+  }
+  
+  /* Loading Spinner */
+  .stSpinner > div[role="progressbar"] {
+    border-top-color: var(--netflix-red);
+  }
