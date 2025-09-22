@@ -8,7 +8,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts.chat import MessagesPlaceholder
 from langchain.prompts.chat import ChatPromptTemplate
 
-from chat.llm import llm
+from src.chat.llm import llm
 import streamlit as st
 from database.graph import graph
 from utils import get_session_id
