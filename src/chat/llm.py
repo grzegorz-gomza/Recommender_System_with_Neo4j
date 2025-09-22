@@ -5,6 +5,7 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 llm = ChatOpenAI(
     openai_api_key=st.secrets["OPENAI_API_KEY"],
     model=st.secrets["OPENAI_MODEL"],
+    temperature=1,
 )
 
 # Create the Embedding model
