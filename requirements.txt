@@ -44,9 +44,9 @@ langchain-core
 langchain-experimental
 langchain-neo4j
 langchain-openai==0.3.33
-langchain-text-splitters==0.3.5
-langchainhub==0.1.21
-langsmith==0.1.147
+langchain-text-splitters
+langchainhub
+langsmith
 markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 marshmallow==3.26.1
@@ -71,9 +71,9 @@ protobuf==4.25.6
 psutil==6.1.1
 pure_eval==0.2.3
 pyarrow==19.0.0
-pydantic==2.10.6
-pydantic-settings==2.7.1
-pydantic_core==2.27.2
+pydantic
+pydantic-settings
+pydantic_core
 pydeck==0.9.1
 Pygments==2.19.1
 python-dateutil==2.9.0.post0
