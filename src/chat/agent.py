@@ -10,13 +10,13 @@ from langchain.prompts.chat import ChatPromptTemplate
 
 from src.chat.llm import llm
 import streamlit as st
-from database.graph import graph
-from utils import get_session_id
+from src.database.graph import graph
+from src.utils import get_session_id
 
-from tools.vector_recommender import recommend_similar_movies
-from tools.cypher import recommend_movies_relationships
-from tools.user_preferences import recommend_movies_user_preferences
-from prompts.llm_prompts import AGENT_PROMPT
+from src.tools.vector_recommender import recommend_similar_movies
+from src.tools.cypher import recommend_movies_relationships
+from src.tools.user_preferences import recommend_movies_user_preferences
+from src.prompts.llm_prompts import AGENT_PROMPT
 
 
 def create_chat_chain():
