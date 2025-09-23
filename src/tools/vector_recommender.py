@@ -6,9 +6,9 @@ from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
 from langchain.tools import tool
 
-from chat.llm import llm, embeddings
-from database.graph import graph
-from prompts.llm_prompts import VECTOR_RECOMMENDATION_PROMPT
+from src.chat.llm import llm, embeddings
+from src.database.graph import graph
+from src.prompts.llm_prompts import VECTOR_RECOMMENDATION_PROMPT
 
 
 class MovieRecommenderVectorSimilarity:

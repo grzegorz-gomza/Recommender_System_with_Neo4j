@@ -2,16 +2,16 @@ from typing import Any
 from langchain.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
 from langchain.tools import tool
-from chat.llm import llm
+from src.chat.llm import llm
 import streamlit as st
-from database.graph import graph
+from src.database.graph import graph
 from langchain_neo4j import Neo4jGraph
-from prompts.cypher_prompts import (
+from src.prompts.cypher_prompts import (
     CYPHER_MOVIE_SIMILARITY_SEARCH_TEMPLATE,
     CYPHER_GENRE_SIMILARITY_SEARCH_TEMPLATE,
     CYPHER_ACTOR_SIMILARITY_SEARCH_TEMPLATE,
 )
-from prompts.llm_prompts import USER_PREFERENCES_RECOMMENDATION_PROMPT
+from src.prompts.llm_prompts import USER_PREFERENCES_RECOMMENDATION_PROMPT
 
 
 class MovieRecommenderUserPreferences:

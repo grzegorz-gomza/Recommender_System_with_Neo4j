@@ -2,9 +2,9 @@ import streamlit as st
 from langchain_neo4j import GraphCypherQAChain
 from langchain.prompts.prompt import PromptTemplate
 
-from chat.llm import llm
-from database.graph import graph
-from prompts.cypher_prompts import CYPHER_GENERATION_TEMPLATE
+from src.chat.llm import llm
+from src.database.graph import graph
+from src.prompts.cypher_prompts import CYPHER_GENERATION_TEMPLATE
 
 # Create the Cypher prompt
 cypher_prompt = PromptTemplate.from_template(CYPHER_GENERATION_TEMPLATE)
