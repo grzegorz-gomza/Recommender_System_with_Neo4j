@@ -1,4 +1,4 @@
-# Recommender Chat for Netflix
+
 
 This project provides an interactive movie recommendation experience powered by a conversational AI agent. It leverages the capabilities of Neo4j (a graph database), Langchain (a framework for building LLM applications), and Streamlit (for creating the user interface).
 
